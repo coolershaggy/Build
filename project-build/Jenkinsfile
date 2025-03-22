@@ -8,22 +8,31 @@ pipeline {
 
     stages {
         stage('Checkout') {
-			echo 'HERE WE GO!'
             steps {
-                // Pull the source code
+                // Pull the source code from the Git repository
                 checkout scm
             }
         }
+
         stage('Build') {
             steps {
-                // Create the build directory and run CMake and Make using Windows commands
-                bat 'mkdir build && cd build && cmake .. && make'
+                // Create the build directory and run CMake and Make using Windows batch commands
+                bat '''
+                if not exist build mkdir build
+                cd build
+                cmake .. 
+                make
+                '''
             }
         }
+
         stage('Test') {
             steps {
                 // Run the compiled program from the build directory
-                bat 'build\\project-build'
+                bat '''
+                cd build
+                project-build
+                '''
             }
         }
     }
@@ -36,7 +45,7 @@ pipeline {
             echo 'Build and Test stages succeeded!'
         }
         failure {
-            echo 'Pipeline failed. Check the logs for details.'
+            echo 'Pipeline failed. Please check the logs for details.'
         }
     }
 }
