@@ -8,6 +8,7 @@ pipeline {
 
     stages {
         stage('Checkout') {
+			echo 'HERE WE GO!'
             steps {
                 // Pull the source code
                 checkout scm
